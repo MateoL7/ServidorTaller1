@@ -28,8 +28,8 @@ public class ServidorT1 extends Thread {
 		return instance;
 	}
 
-	
-	
+
+
 	private ServerSocket server;
 	private Socket socket;
 	private int puerto;
@@ -76,53 +76,4 @@ public class ServidorT1 extends Thread {
 		public String OnMessage(String msg);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//	public int contador;
-	//	private OnProcessListener listener;
-	//	
-	//	public void setListener(OnProcessListener listener) {
-	//		this.listener = listener;
-	//	}
-
-	//	@Override
-	//	public void run() {
-	//		
-	//		for(int i = 0; i< 10; i++) {
-	//			try {
-	//				Thread.sleep(1000);
-	//			} catch (InterruptedException e) {
-	//				e.printStackTrace();
-	//			}
-	//			contador++;
-	//			listener.onUpdate(contador);
-	//		}
-	//		listener.onFinish();
-	//	}
-
-	//	public int getContador() {
-	//		return contador;
-	//	}
-
-
-	//	public interface OnProcessListener{
-	//		public void onFinish();
-	//		public void onUpdate(int value);
-	//	}
 }
