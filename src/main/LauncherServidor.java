@@ -10,7 +10,6 @@ public class LauncherServidor {
 		Application app = new Application();
 		app.init();
 		
-		while(true) {}
 	}
 
 }

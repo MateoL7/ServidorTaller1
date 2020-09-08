@@ -1,23 +1,19 @@
 package comm;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import comm.Receptor.OnMessageListener;
 
 //CLASE OBSERVADA
 
 public class ServidorT1 extends Thread {
 
 
+	//SINGLETON
 	private static ServidorT1 instance;
-
-
 	private ServidorT1() {
 
 	}
@@ -33,8 +29,8 @@ public class ServidorT1 extends Thread {
 	private ServerSocket server;
 	private Socket socket;
 	private int puerto;
-
-
+	private Emisor emisor;
+	private Receptor receptor;
 	public OnMessageListener listener;
 
 	public void setPuerto(int puerto) {
@@ -48,19 +44,12 @@ public class ServidorT1 extends Thread {
 			System.out.println("Esperando cliente");
 			socket = server.accept();
 			System.out.println("Cliente Conectado");
-			InputStream is = socket.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-			OutputStream out = socket.getOutputStream();
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
-
-			while(true) {
-
-				String msg = br.readLine();
-				String answer = listener.OnMessage(msg);
-				bw.write(answer + "\n");
-				bw.flush();
-			}
+			
+			receptor = new Receptor(socket.getInputStream());
+			receptor.setListener(listener);
+			receptor.start();
+			
+			emisor = new Emisor(socket.getOutputStream());
 
 
 		} catch (IOException e) {
@@ -68,12 +57,12 @@ public class ServidorT1 extends Thread {
 		}
 	}
 
-	public void setListener(OnMessageListener listener) {
-		this.listener = listener;
+	public void setListenerOfMessages(OnMessageListener listener) {
+		 this.listener = listener;
 	}
-
-	public interface OnMessageListener{
-		public String OnMessage(String msg);
+	
+	public Emisor getEmisor() {
+		return this.emisor;
 	}
 
 }

@@ -2,15 +2,20 @@ package app;
 import comm.ServidorT1;
 import model.Commands;
 
+import java.util.Scanner;
+
+import comm.Emisor;
+import comm.Receptor.OnMessageListener;
+
 //OBSERVADOR
-public class Application implements ServidorT1.OnMessageListener{
+public class Application implements OnMessageListener{
 
 	private ServidorT1 connection;
 	private Commands commands;
 
 	public Application(){
 		connection = ServidorT1.getInstance();
-		connection.setListener(this);
+		connection.setListenerOfMessages(this);
 		connection.setPuerto(5000);
 		commands = new Commands();
 	}
@@ -20,7 +25,7 @@ public class Application implements ServidorT1.OnMessageListener{
 	}
 
 	@Override
-	public String OnMessage(String msg) {
+	public void OnMessage(String msg) {
 		String answer = "No es un comando valido";
 		if(msg.equalsIgnoreCase("remoteipconfig")) {
 			answer = commands.getIP();
@@ -33,7 +38,9 @@ public class Application implements ServidorT1.OnMessageListener{
 		}else if(msg.getBytes().length == 8192) {
 			answer = msg;
 		}
-		return answer;
+		Emisor em = connection.getEmisor();
+		if(em != null) em.sendMessage(answer);
+		else System.out.println("No hay cliente conectado");
 	}
 
 
